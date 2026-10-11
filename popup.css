@@ -1,0 +1,528 @@
+/* Peekword popup
+   Palette is OKLCH: warm neutral ground, one rose field in the header,
+   berry for the single primary action, a calm teal for word-type labels.
+
+   Layout: one 20px gutter, left-aligned content, a 4px spacing scale.
+   The header is a slim rose band; the mascot peeks up from its lower edge. */
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("assets/fonts/merriweather-latin-wght-normal.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("assets/fonts/merriweather-latin-wght-italic.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+
+  --ink: oklch(27% 0.05 345);
+  --ink-soft: oklch(44% 0.045 345);
+
+  --ground: oklch(99.3% 0.004 80);
+  --soft: oklch(96.5% 0.012 75);
+  --soft-edge: oklch(91% 0.02 70);
+
+  --rose: oklch(87% 0.075 10);
+  --rose-deep: oklch(74% 0.13 8);
+
+  --berry: oklch(50% 0.175 5);
+  --berry-dark: oklch(43% 0.165 5);
+
+  --teal: oklch(52% 0.085 195);
+  --teal-wash: oklch(93.5% 0.04 195);
+  --teal-ink: oklch(36% 0.07 200);
+
+  --skin: oklch(95% 0.035 75);
+  --butter: oklch(93% 0.07 90);
+
+  --font: "Merriweather", Georgia, "Times New Roman", serif;
+
+  --gutter: 20px;
+  --radius: 12px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Chrome draws the popup as an opaque rectangle, so the design fills it edge to edge. */
+html {
+  background: var(--ground);
+}
+
+body {
+  width: 340px;
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+::selection {
+  background: var(--berry);
+  color: #fff;
+}
+
+/* Header ---------------------------------------------------------- */
+
+.hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 76px;
+  padding: 0 var(--gutter);
+  overflow: hidden;
+  background: var(--rose);
+}
+
+.brand {
+  align-self: center;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.mascot {
+  display: block;
+  flex: none;
+  /* Optical: the figure's right edge (magnifier hand) lands on the gutter, as the brand does on the left. */
+  margin-right: -16px;
+}
+
+.mascot .blob      { fill: var(--rose-deep); }
+.mascot .sparkle   { fill: #fff; opacity: 0.85; }
+.mascot .sweater   { fill: var(--teal); stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
+.mascot .collar    { fill: var(--butter); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+.mascot .skin      { fill: var(--skin); stroke: var(--ink); stroke-width: 3; }
+.mascot .hair      { fill: var(--ink); }
+.mascot .eye       { fill: var(--ink); }
+.mascot .cheek     { fill: var(--rose-deep); opacity: 0.55; }
+.mascot .mouth     { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+
+.mascot .handle-edge { fill: none; stroke: var(--ink); stroke-width: 11; stroke-linecap: round; }
+.mascot .handle-core { fill: none; stroke: var(--butter); stroke-width: 5; stroke-linecap: round; }
+.mascot .hand        { fill: var(--skin); stroke: var(--ink); stroke-width: 3; }
+.mascot .glass       { fill: #fff; fill-opacity: 0.6; stroke: var(--ink); stroke-width: 4; }
+.mascot .eyeball     { fill: #fff; stroke: var(--ink); stroke-width: 2; }
+.mascot .iris        { fill: var(--teal); }
+.mascot .pupil       { fill: var(--ink); }
+.mascot .glint       { fill: #fff; }
+.mascot .glare       { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; opacity: 0.9; }
+
+/* One authored moment: the magnifier swings up into place on open. */
+.lens {
+  transform-box: fill-box;
+  transform-origin: 85% 90%;
+  animation: peek 700ms var(--ease-out) both;
+}
+
+@keyframes peek {
+  from { transform: translate(6px, 10px) rotate(-10deg); }
+  to   { transform: none; }
+}
+
+/* Entry ----------------------------------------------------------- */
+
+[hidden] {
+  display: none !important;
+}
+
+.entry {
+  padding: 16px var(--gutter) 20px;
+}
+
+/* The word and its pronunciation button share one row. */
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.word {
+  min-width: 0;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.word.is-long {
+  font-size: 22px;
+}
+
+.word.is-longer {
+  font-size: 19px;
+}
+
+/* Part of speech and phonetic on the left, meaning pager on the right. */
+.sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+  margin-top: 4px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+  margin: 0;
+}
+
+.pos {
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--teal-wash);
+  color: var(--teal-ink);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.phonetic {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.meaning {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.example {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: var(--soft);
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Meaning pager --------------------------------------------------- */
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  /* Optical: the 32px hit area extends past the gutter so the arrow's ink meets the example box's edge. */
+  margin-right: -12px;
+}
+
+.pager-label {
+  min-width: 48px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.pager-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+.pager-btn .icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pager-btn:hover {
+  background: var(--soft);
+}
+
+.pager-btn:focus-visible {
+  outline: 3px solid var(--berry);
+  outline-offset: -1px;
+}
+
+/* Listen ---------------------------------------------------------- */
+
+/* Slow playback (quiet) sits left of normal playback (the primary action). */
+.voice {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.slow {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--soft);
+  box-shadow: inset 0 0 0 1.5px var(--soft-edge);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+.slow .icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.slow:hover {
+  background: var(--soft-edge);
+}
+
+.slow:focus-visible {
+  outline: 3px solid var(--berry);
+  outline-offset: 2px;
+}
+
+.slow.is-speaking {
+  background: var(--teal-ink);
+  box-shadow: none;
+  color: #fff;
+}
+
+.listen {
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--berry);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 150ms var(--ease-out),
+    background-color 150ms ease-out;
+}
+
+.listen .icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.listen:hover {
+  background: var(--berry-dark);
+  transform: translateY(-1px);
+}
+
+.listen:active {
+  transform: translateY(0);
+}
+
+.listen:focus-visible {
+  outline: 3px solid var(--berry);
+  outline-offset: 2px;
+}
+
+/* While it speaks, the sound waves pulse in turn. */
+.listen.is-speaking {
+  background: var(--berry-dark);
+}
+
+.listen.is-speaking .wave {
+  animation: wave 900ms ease-in-out infinite;
+}
+
+.listen.is-speaking .wave-2 {
+  animation-delay: 220ms;
+}
+
+@keyframes wave {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.25; }
+}
+
+/* Buttons --------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    transform 150ms var(--ease-out),
+    background-color 150ms ease-out;
+}
+
+.btn .icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn-primary {
+  background: var(--berry);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--berry-dark);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--berry);
+  outline-offset: 2px;
+}
+
+/* Source credit --------------------------------------------------- */
+
+.credit {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.credit a {
+  color: var(--teal-ink);
+  text-underline-offset: 2px;
+}
+
+.credit a:focus-visible {
+  outline: 2px solid var(--berry);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Status and search ----------------------------------------------- */
+
+.status-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.status-text {
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.search {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.field {
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--soft);
+  box-shadow: inset 0 0 0 1.5px var(--soft-edge);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.field::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
+.field:focus-visible {
+  outline: 2px solid var(--berry);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lens {
+    animation: none;
+  }
+
+  .btn,
+  .listen,
+  .slow,
+  .pager-btn {
+    transition: none;
+  }
+
+  .listen.is-speaking .wave {
+    animation: none;
+  }
+}

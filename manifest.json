@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Peekword",
+    "version": "1.0.0",
+    "description": "Peek at the meaning of any word you select, without leaving the page.",
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "https://api.dictionaryapi.dev/*",
+        "https://en.wiktionary.org/*"
+    ],
+    "action": {
+        "default_title": "Peekword",
+        "default_popup": "popup.html",
+        "default_icon": "/assets/icon48.png"
+    },
+    "icons": {
+        "16": "/assets/icon16.png",
+        "32": "/assets/icon32.png",
+        "48": "/assets/icon48.png",
+        "128": "/assets/icon128.png"
+    }
+}

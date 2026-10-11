@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peekword</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="hero">
+    <p class="brand">Peekword</p>
+
+    <svg class="mascot" viewBox="30 2 190 96" width="152" height="77" aria-hidden="true" focusable="false">
+      <path class="blob" d="M64 78 C58 42 92 20 128 26 C168 32 190 54 180 86 C172 112 124 126 88 114 C72 108 66 94 64 78 Z"/>
+
+      <path class="sparkle" d="M0 -7 C1 -2.5 2.5 -1 7 0 C2.5 1 1 2.5 0 7 C-1 2.5 -2.5 1 -7 0 C-2.5 -1 -1 -2.5 0 -7 Z" transform="translate(40 38)"/>
+      <path class="sparkle" d="M0 -7 C1 -2.5 2.5 -1 7 0 C2.5 1 1 2.5 0 7 C-1 2.5 -2.5 1 -7 0 C-2.5 -1 -1 -2.5 0 -7 Z" transform="translate(206 34) scale(0.75)"/>
+      <path class="sparkle" d="M0 -7 C1 -2.5 2.5 -1 7 0 C2.5 1 1 2.5 0 7 C-1 2.5 -2.5 1 -7 0 C-2.5 -1 -1 -2.5 0 -7 Z" transform="translate(54 90) scale(0.55)"/>
+
+      <path class="sweater" d="M72 126 C74 100 93 92 112 92 L128 92 C147 92 166 100 168 126 Z"/>
+      <path class="collar" d="M107 92 L120 108 L133 92 Z"/>
+
+      <circle class="skin" cx="119" cy="62" r="30"/>
+      <path class="hair" d="M88 58 C85 34 103 25 120 27 C139 27 152 41 150 58 C142 46 130 41 119 41 C106 41 95 47 88 58 Z"/>
+      <path class="hair" d="M111 29 C109 20 118 15 123 22 C128 17 136 23 131 30 Z"/>
+      <circle class="eye" cx="103" cy="64" r="3.2"/>
+      <ellipse class="cheek" cx="98" cy="75" rx="6" ry="4"/>
+      <path class="mouth" d="M107 80 Q114 87 122 80"/>
+
+      <g class="lens">
+        <path class="handle-edge" d="M161 85 L185 108"/>
+        <path class="handle-core" d="M161 85 L185 108"/>
+        <circle class="hand" cx="177" cy="100" r="9"/>
+        <circle class="glass" cx="142" cy="66" r="27"/>
+        <ellipse class="eyeball" cx="142" cy="66" rx="16" ry="13"/>
+        <circle class="iris" cx="142" cy="66" r="8"/>
+        <circle class="pupil" cx="142" cy="66" r="4"/>
+        <circle class="glint" cx="145" cy="62" r="2.2"/>
+        <path class="glare" d="M123 57 A20 20 0 0 1 135 46"/>
+      </g>
+    </svg>
+  </header>
+
+  <main class="entry" aria-live="polite">
+    <section id="result" hidden>
+      <div class="head">
+        <h1 class="word" id="word"></h1>
+        <div class="voice" id="voice">
+          <button class="slow" id="slowBtn" type="button" aria-label="Listen slowly" aria-pressed="false" title="Listen slowly">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 15c0-4.5 3-7 7-7s7 2.5 7 7z"/><circle cx="20.4" cy="12.8" r="1.7"/><path d="M8 15v3.5M15 15v3.5M4.5 14.5l-2 1.2"/></svg>
+          </button>
+          <button class="listen" id="listenBtn" type="button" aria-label="Listen to pronunciation" aria-pressed="false" title="Listen">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="cone" d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path class="wave wave-1" d="M15.5 9a4 4 0 0 1 0 6"/><path class="wave wave-2" d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sub" id="sub">
+        <p class="meta" id="meta">
+          <span class="pos" id="part-of-speech"></span>
+          <span class="phonetic" id="phonetic"></span>
+        </p>
+
+        <div class="pager" id="pager" hidden>
+          <button class="pager-btn" id="prevBtn" type="button" aria-label="Previous meaning">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <span class="pager-label" id="pagerLabel" aria-live="polite"></span>
+          <button class="pager-btn" id="nextBtn" type="button" aria-label="Next meaning">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <p class="meaning" id="meaning"></p>
+
+      <p class="example" id="example"></p>
+
+      <!-- Required credit for entries that come from Wiktionary (CC BY-SA). -->
+      <p class="credit" id="credit" hidden>
+        Adapted from
+        <a id="creditLink" href="https://en.wiktionary.org/" target="_blank" rel="noopener noreferrer">Wiktionary</a>
+        · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+      </p>
+    </section>
+
+    <section id="status">
+      <h1 class="status-title" id="statusTitle">Looking up…</h1>
+      <p class="status-text" id="statusText"></p>
+    </section>
+
+    <form class="search" id="searchForm" hidden>
+      <input class="field" id="searchInput" type="text" placeholder="Type a word" aria-label="Word to look up" autocomplete="off" spellcheck="false">
+      <button class="btn btn-primary" type="submit">Look up</button>
+    </form>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>
