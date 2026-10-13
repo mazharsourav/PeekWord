@@ -95,13 +95,6 @@ node --check popup.js
 
 The popup is a fixed 340px-wide window that fills Chrome's rectangular popup frame edge to edge, because extensions cannot round or make that frame transparent.
 
-## Ideas for later
-
-- A right-click "look up" menu item.
-- Recorded human audio where a source provides it, with speech synthesis as fallback.
-- Grammar notes, which would need an AI source.
-- Saving words for later review.
-
 ## Credits and licenses
 
 - **Peekword** is released under the [MIT License](LICENSE).
